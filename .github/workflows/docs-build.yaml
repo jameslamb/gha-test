@@ -1,0 +1,38 @@
+name: docs-build
+
+concurrency:
+  group: docs-build-on-${{ github.event_name }}-from-${{ github.ref_name }}
+  cancel-in-progress: true
+
+on:
+  # run only when called by other workflows
+  workflow_call:
+    inputs:
+      deploy:
+        required: true
+        type: boolean
+        default: false
+        description: "set to true to publish docs"
+      script:
+        required: true
+        type: string
+        description: "relative path to a script that builds conda packages"
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build docs
+        run: "${{ inputs.script }}"
+
+  deploy:
+    needs:
+      - build
+    if: inputs.deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: deploy-to-github-pages
+        run: |
+          echo "deploying"
