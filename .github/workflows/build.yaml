@@ -27,7 +27,7 @@ jobs:
       script: "ci/build_docs.sh"
       # --- this worked ---
       # deploy: ${{ github.event_name == 'workflow_dispatch' }}
-      deploy: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy-docs == 'true' }}
+      deploy: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy-docs == true }}
       # only deploy docs on tag pushes or when someone manually runs the workflow
       #deploy: ${{ github.event_name == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.deploy-docs == 'true') }}
     secrets: inherit
